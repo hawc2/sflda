@@ -58,3 +58,9 @@ target/
 
 #config file
 config.py
+
+# Text backup files
+*.bak
+
+# Database
+*.sqlite3
