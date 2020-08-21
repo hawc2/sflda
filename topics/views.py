@@ -3,34 +3,27 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Choice, Question
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.views import generic
+from django.utils import timezone
 
 # Create your views here.
 
 #def index(request):
 #    return HttpResponse("Welcome to the SF Nexus website's page for visualizing the science fiction corpus through LDA topic modeling in Gensim with pyldavis. Stay tuned for an interactive visualization, downloadable extracted features datasets, and guided tutorials and instructions.")
 
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'topics/index.html', context)
+class IndexView(generic.ListView):
+    template_name = 'topics/index.html'
+    context_object_name = 'latest_question_list'
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
-#def detail(request, question_id):
-#    return HttpResponse("What science fiction authors do you want to study?" % question_id)
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'topics/detail.html'
 
-def detail(request, question_id):
-    try:
-        question = Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        raise Http404("Question does not exist")
-    return render(request, 'topics/detail.html', {'question': question})
-
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'topics/detail.html', {'question': question})
-
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'topics/results.html', {'question': question})
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'topics/results.html'
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)

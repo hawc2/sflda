@@ -286,7 +286,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 			for ( name in options ) {
 				copy = options[ name ];
 
-				// Prevent Object.prototype pollution
+				// Prevent Object.prototype topicsution
 				// Prevent never-ending loop
 				if ( name === "__proto__" || target === copy ) {
 					continue;
