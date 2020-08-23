@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
+import grappelli
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -24,6 +24,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 urlpatterns = [
     path('topics/', include('topics.urls')),
+    path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('admin/', admin.site.urls),
     path('cms/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),

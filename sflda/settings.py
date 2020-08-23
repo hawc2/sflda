@@ -10,16 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
-
+#import dj_database_url
 from pathlib import Path
+from config import Key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#BASE_DIR = os.path.dirname((os.path.realpath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-from config import Key
-
 SECRET_KEY = Key
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -29,6 +28,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'topics.apps.TopicsConfig',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
-
     'modelcluster',
     'taggit',
 ]
@@ -99,17 +98,17 @@ WAGTAIL_SITE_NAME = 'SFLDA'
 
 
 # Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
+#import dj_database_url
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
-DATABASES = {'default': dj_database_url.config()}
+#db_from_env = dj_database_url.config(conn_max_age=500)
+#DATABASES = {'default': dj_database_url.config()}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
+#DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -146,11 +145,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 import os
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = '/static/'
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    "sflda\topics\static",
+    os.path.join(PROJECT_ROOT, 'static'),
 )
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
