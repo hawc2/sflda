@@ -8,18 +8,21 @@ from django.utils import timezone
 
 # Create your views here.
 
-#def index(request):
-#    return HttpResponse("Welcome to the SF Nexus website's page for visualizing the science fiction corpus through LDA topic modeling in Gensim with pyldavis. Stay tuned for an interactive visualization, downloadable extracted features datasets, and guided tutorials and instructions.")
+def index(request):
+    return HttpResponse("Welcome to the SF Nexus website's page for visualizing the science fiction corpus through LDA topic modeling in Gensim with pyldavis. Stay tuned for an interactive visualization, downloadable extracted features datasets, and guided tutorials and instructions.")
 
 class IndexView(generic.ListView):
     template_name = 'topics/index.html'
     context_object_name = 'latest_question_list'
+
     def get_queryset(self):
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'topics/detail.html'
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 class ResultsView(generic.DetailView):
     model = Question

@@ -15,17 +15,17 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 from config import Key
+
 SECRET_KEY = Key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
 
 INSTALLED_APPS = [
     'topics.apps.TopicsConfig',
@@ -35,6 +35,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
+
+    'modelcluster',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -46,20 +60,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'sflda.urls'
 
 SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
-#TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'topics/templates')]
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'topics/templates')]
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': [BASE_DIR / 'templates']
+        # 'DIRS': [BASE_DIR / 'templates']
         'DIRS': [os.path.join(SETTINGS_PATH, 'templates'),
-        os.path.join(BASE_DIR, 'topics', 'templates', 'topics')],
+                 os.path.join(BASE_DIR, 'topics', 'templates', 'topics')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +89,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sflda.wsgi.application'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+WAGTAIL_SITE_NAME = 'SFLDA'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -81,16 +100,16 @@ WSGI_APPLICATION = 'sflda.wsgi.application'
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
+
 db_from_env = dj_database_url.config(conn_max_age=500)
-#DATABASES['default'].update(db_from_env)
-DATABASES = { 'default': dj_database_url.config() }
+# DATABASES['default'].update(db_from_env)
+DATABASES = {'default': dj_database_url.config()}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -110,7 +129,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -124,15 +142,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 import os
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     "sflda\topics\static",
-    )
+)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
